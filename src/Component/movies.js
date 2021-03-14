@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {getMovies, deleteMovie} from '../services/fakeMovieService'
+import {getMovies} from '../services/fakeMovieService'
 import Like from './common/like'
 import Pagination from './common/pagination';
+import {paginate} from '../Utils/paginate'
 
 class Movies extends Component {
     constructor(props){
@@ -13,6 +14,7 @@ class Movies extends Component {
          currentPage:1} ;
         
     }
+
    
     handleDelete=(movieId)=>{
         console.log(movieId)
@@ -32,7 +34,7 @@ class Movies extends Component {
         this.setState({currentPage: page})
     }
 
-    handleTable =()=>{
+    handleTable =(movies)=>{
         return(
             <>
             <h3>Showing {this.state.movies.length} movies in the database</h3>  
@@ -49,7 +51,7 @@ class Movies extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.movies.map(movie=>(
+                        {movies.map(movie=>(
                                           
                                     <tr key={movie._id}>
                                         <td>{movie.title}</td>
@@ -74,10 +76,15 @@ class Movies extends Component {
             
         )
     }
+
+   
+
     render() { 
+        const movies = paginate(this.state.movies, this.state.currentPage, this.state.pageSize)
+
         return (
             <React.Fragment>
-                {this.state.movies.length ? this.handleTable(): <h3>There are no movies in the database</h3>}
+                {this.state.movies.length ? this.handleTable(movies): <h3>There are no movies in the database</h3>}
 
             </React.Fragment>
 
