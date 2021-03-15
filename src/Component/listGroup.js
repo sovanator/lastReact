@@ -7,6 +7,7 @@ const Listgroup = (props) => {
     return ( 
         <React.Fragment>
             <ul className="list-group">
+                 <li className="list-group-item" onClick={()=>onClick('All')}>All Genere</li>
                   {genres.map(genre=>(                           
                                           <li className="list-group-item"
                                               onClick={()=>onClick(genre._id)}>{genre.name}                                  

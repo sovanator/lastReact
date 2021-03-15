@@ -38,7 +38,7 @@ class Movies extends Component {
 
     handleGenreChange=(genreId)=>{
         const movies_all = getMovies()
-        const movies = movies_all.filter((movie)=>movie.genre._id==genreId)
+        const movies = genreId=="All" ? movies_all : movies_all.filter((movie)=>movie.genre._id==genreId)
         this.setState({movies})
 
     }
