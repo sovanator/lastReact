@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {getMovies} from '../services/fakeMovieService'
+import {genres, getGenres} from '../services/fakeGenreService'
 import Like from './common/like'
 import Pagination from './common/pagination';
 import {paginate} from '../Utils/paginate'
+import Listgroup from './listGroup';
 
 class Movies extends Component {
     constructor(props){
@@ -34,9 +36,17 @@ class Movies extends Component {
         this.setState({currentPage: page})
     }
 
+    handleGenreChange=(genreId)=>{
+        const movies_all = getMovies()
+        const movies = movies_all.filter((movie)=>movie.genre._id==genreId)
+        this.setState({movies})
+
+    }
+
     handleTable =(movies)=>{
         return(
             <>
+           
             <h3>Showing {this.state.movies.length} movies in the database</h3>  
                 
                 <table className="table">
@@ -58,15 +68,20 @@ class Movies extends Component {
                                         <td>{movie.genre.name}</td>
                                         <td>{movie.numberInStock}</td>
                                         <td>{movie.dailyRentalRate}</td>
-                                        <td><Like liked={movie.liked}
-                                        onLike={()=>this.handleLike(movie)}
-                                         /></td>
+                                        <td>
+                                            <Like liked={movie.liked}
+                                                  onLike={()=>this.handleLike(movie)}
+                                         />
+                                         </td>
                                         <td><button onClick={()=>this.handleDelete(movie._id)} className="btn btn-danger">Delete</button></td>
                                 
                                     </tr>
                         ))}        
                     </tbody>
                 </table>
+                 <Listgroup movies={movies}
+                       genres={genres}
+                       onClick={this.handleGenreChange}      />
                 <Pagination 
                 itemsCount={this.state.movies.length} 
                 pageSize={this.state.pageSize} 
@@ -84,7 +99,7 @@ class Movies extends Component {
 
         return (
             <React.Fragment>
-                {this.state.movies.length ? this.handleTable(movies): <h3>There are no movies in the database</h3>}
+                {movies.length ? this.handleTable(movies): <h3>There are no movies in the database</h3>}
 
             </React.Fragment>
 
